@@ -1,0 +1,202 @@
+MariaDB [prerna1]> SELECT EMPNO,ENAME,
+    -> CASE DEPTNO
+    -> WHEN 10 THEN "RESEARCH"
+    -> WHEN 20 THEN "ACCOUNTING"
+    -> WHEN 30 THEN "SALES"
+    -> WHEN 40 THEN "OPERATIONS"
+    -> END AS DEPT_NAMES
+    -> FROM employee;
++-------+--------+------------+
+| EMPNO | ENAME  | DEPT_NAMES |
++-------+--------+------------+
+|  7369 | SMITH  | ACCOUNTING |
+|  7499 | ALLEN  | SALES      |
+|  7521 | WARD   | SALES      |
+|  7566 | JONES  | ACCOUNTING |
+|  7654 | MARTIN | SALES      |
+|  7782 | CLARK  | ACCOUNTING |
+|  7788 | SCOTT  | OPERATIONS |
+|  7839 | KING   | ACCOUNTING |
+|  7844 | TURNER | SALES      |
+|  7876 | ADAMS  | ACCOUNTING |
+|  7900 | JAMES  | SALES      |
+|  7902 | FORD   | ACCOUNTING |
+|  7934 | MILLER | RESEARCH   |
+|  7968 | BLAKE  | SALES      |
++-------+--------+------------+
+14 rows in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT DATEDIFF(CURDATE(),"2005-05-29")
+    -> AS DOB_IN_DAYS;
++-------------+
+| DOB_IN_DAYS |
++-------------+
+|        7608 |
++-------------+
+1 row in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT TIMESTAMPDIFF(MONTH,"2005-05-29",
+    -> CURDATE()) AS DOB_IN_MONTHS;
++---------------+
+| DOB_IN_MONTHS |
++---------------+
+|           249 |
++---------------+
+1 row in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT CONCAT(
+    -> DATE_FORMAT('1997-08-15','%D %M %W),
+    '> ';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 2
+MariaDB [prerna1]> SELECT CONCAT(
+    -> DATE_FORMAT('1997-08-15','%D %M %W'),
+    -> 'NINETEEN NINETY SEVEN'
+    -> ) AS FORMATTED_DATE;
++-----------------------------------------+
+| FORMATTED_DATE                          |
++-----------------------------------------+
+| 15th August FridayNINETEEN NINETY SEVEN |
++-----------------------------------------+
+1 row in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT DATE_FORMAT(CURDATE(),'%D %M %W')
+    -> AS CUR_DATE;
++---------------------+
+| CUR_DATE            |
++---------------------+
+| 28th March Saturday |
++---------------------+
+1 row in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT DATE_ADD(
+    -> CURDATE(),
+    -> INTERVAL (5-WEEKDAY(CURDATE())) DAY
+    -> )AS NEXT_SATURDAY;
++---------------+
+| NEXT_SATURDAY |
++---------------+
+| 2026-03-28    |
++---------------+
+1 row in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT CURTIME() AS CUR_DATE;
++----------+
+| CUR_DATE |
++----------+
+| 02:34:34 |
++----------+
+1 row in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT DATE_SUB(CURDATE(),INTERVAL 3 MONTH)
+    -> AS DATE_BEFORE_3_MONTHS;
++----------------------+
+| DATE_BEFORE_3_MONTHS |
++----------------------+
+| 2025-12-28           |
++----------------------+
+1 row in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT ENAME,HIREDATE
+    -> FROM employee
+    -> WHERE MONTH(HIREDATE) = 12;
++-------+------------+
+| ENAME | HIREDATE   |
++-------+------------+
+| SMITH | 1980-12-17 |
+| SCOTT | 1982-12-09 |
+| JAMES | 1981-12-03 |
+| FORD  | 1981-12-03 |
++-------+------------+
+4 rows in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT ENAME,HIREDATE,SAL
+    -> FROM employee
+    -> WHERE LEFT(DATE_FORMAT(HIREDATE,'%Y'),2) = RIGHT(SAL,2);
+Empty set (0.001 sec)
+
+MariaDB [prerna1]> SELECT ENAME,HIREDATE
+    -> FROM employee
+    -> WHERE (SAL * 0.10) = YEAR(HIREDATE);
+Empty set (0.001 sec)
+
+MariaDB [prerna1]> SELECT ENAME,HIREDATE
+    -> FROM employee
+    -> WHERE DAY(HIREDATE) < 15;
++--------+------------+
+| ENAME  | HIREDATE   |
++--------+------------+
+| JONES  | 1981-04-02 |
+| CLARK  | 1981-06-09 |
+| SCOTT  | 1982-12-09 |
+| TURNER | 1981-09-08 |
+| ADAMS  | 1983-01-12 |
+| JAMES  | 1981-12-03 |
+| FORD   | 1981-12-03 |
+| BLAKE  | 1981-05-01 |
++--------+------------+
+8 rows in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT ENAME,HIREDATE
+    -> FROM employee
+    -> WHERE DAY(HIREDATE) > 15;
++--------+------------+
+| ENAME  | HIREDATE   |
++--------+------------+
+| SMITH  | 1980-12-17 |
+| ALLEN  | 1981-02-20 |
+| WARD   | 1981-02-22 |
+| MARTIN | 1981-09-28 |
+| KING   | 1981-11-17 |
+| MILLER | 1981-01-23 |
++--------+------------+
+6 rows in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT ENAME,HIREDATE,DEPTNO
+    -> FROM employee
+    -> WHERE HIREDATE IS NOT NULL
+    -> AND DEPTNO IS NOT NULL;
++--------+------------+--------+
+| ENAME  | HIREDATE   | DEPTNO |
++--------+------------+--------+
+| SMITH  | 1980-12-17 |     20 |
+| ALLEN  | 1981-02-20 |     30 |
+| WARD   | 1981-02-22 |     30 |
+| JONES  | 1981-04-02 |     20 |
+| MARTIN | 1981-09-28 |     30 |
+| CLARK  | 1981-06-09 |     20 |
+| SCOTT  | 1982-12-09 |     40 |
+| KING   | 1981-11-17 |     20 |
+| TURNER | 1981-09-08 |     30 |
+| ADAMS  | 1983-01-12 |     20 |
+| JAMES  | 1981-12-03 |     30 |
+| FORD   | 1981-12-03 |     20 |
+| MILLER | 1981-01-23 |     10 |
+| BLAKE  | 1981-05-01 |     30 |
++--------+------------+--------+
+14 rows in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT CONCAT(
+    -> ENAME,
+    -> 'HAS JOINED THE COMPANY ON',
+    -> DATE_FORMAT(HIREDATE,'%W %D %M %Y')
+    -> ) AS REQUIRED_FORMAT
+    -> FROM employee;
++------------------------------------------------------------+
+| REQUIRED_FORMAT                                            |
++------------------------------------------------------------+
+| SMITHHAS JOINED THE COMPANY ONWednesday 17th December 1980 |
+| ALLENHAS JOINED THE COMPANY ONFriday 20th February 1981    |
+| WARDHAS JOINED THE COMPANY ONSunday 22nd February 1981     |
+| JONESHAS JOINED THE COMPANY ONThursday 2nd April 1981      |
+| MARTINHAS JOINED THE COMPANY ONMonday 28th September 1981  |
+| CLARKHAS JOINED THE COMPANY ONTuesday 9th June 1981        |
+| SCOTTHAS JOINED THE COMPANY ONThursday 9th December 1982   |
+| KINGHAS JOINED THE COMPANY ONTuesday 17th November 1981    |
+| TURNERHAS JOINED THE COMPANY ONTuesday 8th September 1981  |
+| ADAMSHAS JOINED THE COMPANY ONWednesday 12th January 1983  |
+| JAMESHAS JOINED THE COMPANY ONThursday 3rd December 1981   |
+| FORDHAS JOINED THE COMPANY ONThursday 3rd December 1981    |
+| MILLERHAS JOINED THE COMPANY ONFriday 23rd January 1981    |
+| BLAKEHAS JOINED THE COMPANY ONFriday 1st May 1981          |
++------------------------------------------------------------+
+14 rows in set (0.001 sec)
