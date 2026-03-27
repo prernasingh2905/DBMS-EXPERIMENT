@@ -1,0 +1,87 @@
+
+MariaDB [prerna1]> SELECT DATEDIFF(CONCAT(YEAR(CURDATE()),'12-31'),
+    -> CURDATE()) AS DAYS_REMAINING;
++----------------+
+| DAYS_REMAINING |
++----------------+
+|           NULL |
++----------------+
+1 row in set, 1 warning (0.001 sec)
+
+MariaDB [prerna1]> SELECT
+    -> MAX(SAL) AS HIGHEST_SAL,
+    -> MAX(SAL) AS LOWEST_SAL,
+    -> MAX(SAL) - MIN(SAL) AS DIFFERENCES_SAL
+    -> FROM employee;
++-------------+------------+-----------------+
+| HIGHEST_SAL | LOWEST_SAL | DIFFERENCES_SAL |
++-------------+------------+-----------------+
+|        6050 |       6050 |            5082 |
++-------------+------------+-----------------+
+1 row in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT ENAME,SAL,COMM
+    -> FROM employee
+    -> WHERE COMM > (SAL * 0.25);
++--------+------+------+
+| ENAME  | SAL  | COMM |
++--------+------+------+
+| MARTIN | 1250 | 1400 |
++--------+------+------+
+1 row in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT ENAME,
+    -> CONCAT('$',FORMAT(SAL,2)) AS SAL_IN_DOLLOR
+    -> FROM employee;
++--------+---------------+
+| ENAME  | SAL_IN_DOLLOR |
++--------+---------------+
+| SMITH  | $968.00       |
+| ALLEN  | $1,600.00     |
+| WARD   | $1,250.00     |
+| JONES  | $3,600.00     |
+| MARTIN | $1,250.00     |
+| CLARK  | $2,965.00     |
+| SCOTT  | $3,630.00     |
+| KING   | $6,050.00     |
+| TURNER | $1,815.00     |
+| ADAMS  | $1,331.00     |
+| JAMES  | $1,150.00     |
+| FORD   | $3,630.00     |
+| MILLER | $1,573.00     |
+| BLAKE  | $3,449.00     |
++--------+---------------+
+14 rows in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT JOB,
+    -> SUM(CASE WHEN DEPTNO = 10 THEN SAL ELSE 0 END) AS DEPT10,
+    -> SUM(CASE WHEN DEPTNO = 20 THEN SAL ELSE 0 END) AS DEPT20,
+    -> SUM(CASE WHEN DEPTNO = 30 THEN SAL ELSE 0 END) AS DEPT30,
+    -> SUM(CASE WHEN DEPTNO = 40 THEN SAL ELSE 0 END) AS DEPT40,
+    -> SUM(SAL) AS TOTAL_SALARY
+    -> FROM employee
+    -> GROUP BY JOB;
++-----------+--------+--------+--------+--------+--------------+
+| JOB       | DEPT10 | DEPT20 | DEPT30 | DEPT40 | TOTAL_SALARY |
++-----------+--------+--------+--------+--------+--------------+
+| ANALYST   |      0 |   3630 |      0 |   3630 |         7260 |
+| CLERK     |   1573 |   2299 |   1150 |      0 |         5022 |
+| MANAGER   |      0 |   6565 |   3449 |      0 |        10014 |
+| PRESIDENT |      0 |   6050 |      0 |      0 |         6050 |
+| SALESMAN  |      0 |      0 |   5915 |      0 |         5915 |
++-----------+--------+--------+--------+--------+--------------+
+5 rows in set (0.002 sec)
+
+MariaDB [prerna1]> SELECT
+    -> COUNT(*) AS "TOTAL EMPLOYEES",
+    -> SUM(CASE WHEN EXTRACT(YEAR FROM HIREDATE) = 1980 THEN 1 ELSE 0 END) AS "HIRED IN 1980",
+    -> SUM(CASE WHEN EXTRACT(YEAR FROM HIREDATE) = 1981 THEN 1 ELSE 0 END) AS "HIRED IN 1981",
+    -> SUM(CASE WHEN EXTRACT(YEAR FROM HIREDATE) = 1982 THEN 1 ELSE 0 END) AS "HIRED IN 1982",
+    -> SUM(CASE WHEN EXTRACT(YEAR FROM HIREDATE) = 1983 THEN 1 ELSE 0 END) AS "HIRED IN 1983"
+    -> FROM employee;
++-----------------+---------------+---------------+---------------+---------------+
+| TOTAL EMPLOYEES | HIRED IN 1980 | HIRED IN 1981 | HIRED IN 1982 | HIRED IN 1983 |
++-----------------+---------------+---------------+---------------+---------------+
+|              14 |             1 |            11 |             1 |             1 |
++-----------------+---------------+---------------+---------------+---------------+
+1 row in set (0.001 sec)
