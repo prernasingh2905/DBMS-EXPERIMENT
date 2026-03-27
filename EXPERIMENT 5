@@ -1,0 +1,122 @@
+MariaDB [prerna1]> SELECT COUNT(*) FROM employee;
++----------+
+| COUNT(*) |
++----------+
+|       14 |
++----------+
+1 row in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT SUM(sal) AS TOTAL_SALARY
+    -> FROM employee;
++--------------+
+| TOTAL_SALARY |
++--------------+
+|        34261 |
++--------------+
+1 row in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT MAX(sal) AS MAX_SALARY
+    -> FROM employee;
++------------+
+| MAX_SALARY |
++------------+
+|       6050 |
++------------+
+1 row in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT MIN(SAL) AS MIN_SALARY
+    -> FROM employee;
++------------+
+| MIN_SALARY |
++------------+
+|        968 |
++------------+
+1 row in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT AVG(SAL) AS AVG_SALARY
+    -> FROM employee
+    -> ;
++------------+
+| AVG_SALARY |
++------------+
+|  2447.2143 |
++------------+
+1 row in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT MAX(SAL) FROM employee
+    -> WHERE JOB = 'CLERK';
++----------+
+| MAX(SAL) |
++----------+
+|     1573 |
++----------+
+1 row in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT MAX(SAL) FROM employee
+    -> WHERE DEPTNO=20;
++----------+
+| MAX(SAL) |
++----------+
+|     6050 |
++----------+
+1 row in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT MIN(SAL) FROM employee
+    -> WHERE JOB = 'SALESMAN';
++----------+
+| MIN(SAL) |
++----------+
+|     1250 |
++----------+
+1 row in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT AVG(SAL) FROM employee
+    -> WHERE JOB = 'MANAGER';
++-----------+
+| AVG(SAL)  |
++-----------+
+| 3338.0000 |
++-----------+
+1 row in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT UCASE(ENAME) FROM employee;
++--------------+
+| UCASE(ENAME) |
++--------------+
+| SMITH        |
+| ALLEN        |
+| WARD         |
+| JONES        |
+| MARTIN       |
+| CLARK        |
+| SCOTT        |
+| KING         |
+| TURNER       |
+| ADAMS        |
+| JAMES        |
+| FORD         |
+| MILLER       |
+| BLAKE        |
++--------------+
+14 rows in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT LCASE(ENAME) FROM employee;
++--------------+
+| LCASE(ENAME) |
++--------------+
+| smith        |
+| allen        |
+| ward         |
+| jones        |
+| martin       |
+| clark        |
+| scott        |
+| king         |
+| turner       |
+| adams        |
+| james        |
+| ford         |
+| miller       |
+| blake        |
++--------------+
+14 rows in set (0.001 sec)
