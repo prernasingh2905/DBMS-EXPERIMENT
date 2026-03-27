@@ -1,0 +1,130 @@
+
+MariaDB [prerna1]> SELECT ENAME,HIREDATE
+    -> FROM employee
+    -> WHERE HIREDATE<'1980-06-30'
+    -> OR HIREDATE>'1981-12-31';
++-------+------------+
+| ENAME | HIREDATE   |
++-------+------------+
+| SCOTT | 1982-12-09 |
+| ADAMS | 1983-01-12 |
++-------+------------+
+2 rows in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT ENAME
+    -> FROM employee
+    -> WHERE ENAME LIKE '_A%';
++--------+
+| ENAME  |
++--------+
+| WARD   |
+| MARTIN |
+| JAMES  |
++--------+
+3 rows in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT ENAME
+    -> FROM employee
+    -> WHERE LENGTH(ENAME) = 5;
++-------+
+| ENAME |
++-------+
+| SMITH |
+| ALLEN |
+| JONES |
+| CLARK |
+| SCOTT |
+| ADAMS |
+| JAMES |
+| BLAKE |
++-------+
+8 rows in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT ENAME
+    -> FROM employee
+    -> WHERE SUBSTRING(ENAME,2,1) = 'A';
++--------+
+| ENAME  |
++--------+
+| WARD   |
+| MARTIN |
+| JAMES  |
++--------+
+3 rows in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT ENAME
+    -> FROM employee
+    -> WHERE JOB NOT IN('CLERK','SALESMAN','ANALYST');
++-------+
+| ENAME |
++-------+
+| JONES |
+| CLARK |
+| KING  |
+| BLAKE |
++-------+
+4 rows in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT ENAME,(SAL*12) AS ANNUAL_SAL
+    -> FROM employee
+    -> ORDER BY SAL DESC;
++--------+------------+
+| ENAME  | ANNUAL_SAL |
++--------+------------+
+| KING   |      72600 |
+| FORD   |      43560 |
+| SCOTT  |      43560 |
+| JONES  |      43200 |
+| BLAKE  |      41388 |
+| CLARK  |      35580 |
+| TURNER |      21780 |
+| ALLEN  |      19200 |
+| MILLER |      18876 |
+| ADAMS  |      15972 |
+| MARTIN |      15000 |
+| WARD   |      15000 |
+| JAMES  |      13800 |
+| SMITH  |      11616 |
++--------+------------+
+14 rows in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT ENAME,
+    -> SAL,
+    -> (SAL +(SAL*0.2)) AS UPDATED_SALARY
+    -> FROM employee
+    -> WHERE (SAL + (SAL * 0.20))>3000;
++-------+------+----------------+
+| ENAME | SAL  | UPDATED_SALARY |
++-------+------+----------------+
+| JONES | 3600 |         4320.0 |
+| CLARK | 2965 |         3558.0 |
+| SCOTT | 3630 |         4356.0 |
+| KING  | 6050 |         7260.0 |
+| FORD  | 3630 |         4356.0 |
+| BLAKE | 3449 |         4138.8 |
++-------+------+----------------+
+6 rows in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT ENAME,
+    -> SAL
+    -> FROM employee
+    -> WHERE LENGTH(SAL) >=3;
++--------+------+
+| ENAME  | SAL  |
++--------+------+
+| SMITH  |  968 |
+| ALLEN  | 1600 |
+| WARD   | 1250 |
+| JONES  | 3600 |
+| MARTIN | 1250 |
+| CLARK  | 2965 |
+| SCOTT  | 3630 |
+| KING   | 6050 |
+| TURNER | 1815 |
+| ADAMS  | 1331 |
+| JAMES  | 1150 |
+| FORD   | 3630 |
+| MILLER | 1573 |
+| BLAKE  | 3449 |
++--------+------+
+14 rows in set (0.001 sec)
