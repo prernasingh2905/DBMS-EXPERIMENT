@@ -1,0 +1,162 @@
+Database changed
+MariaDB [prerna1]> SELECT E.EMPNO, E.ENAME, D.DNAME
+    -> FROM EMPLOYEE E
+    -> JOIN DEPARTMENT D
+    -> ON E.DEPTNO = D.DEPTNO;
++-------+--------+------------+
+| EMPNO | ENAME  | DNAME      |
++-------+--------+------------+
+|  7934 | MILLER | RESEARCH   |
+|  7876 | ADAMS  | ACCOUNTING |
+|  7499 | ALLEN  | SALES      |
+|  7521 | WARD   | SALES      |
+|  7654 | MARTIN | SALES      |
+|  7844 | TURNER | SALES      |
+|  7900 | JAMES  | SALES      |
+|  7968 | BLAKE  | SALES      |
++-------+--------+------------+
+8 rows in set (0.055 sec)
+
+
+MariaDB [prerna1]> SELECT
+    ->     E.ENAME AS EMPLOYEE,
+    ->     M.ENAME AS MANAGER
+    -> FROM EMPLOYEE E
+    -> JOIN EMPLOYEE M
+    -> ON E.MGR = M.EMPNO
+    -> WHERE M.ENAME = 'JONES';
+Empty set (0.006 sec)
+
+
+MariaDB [prerna1]> SELECT e.ENAME, e.JOB, e.SAL, s.GRADE, d.DNAME
+    -> FROM EMPLOYEE e
+    -> JOIN DEPARTMENT d ON e.DEPTNO = d.DEPTNO
+    -> JOIN SALGRADE s ON e.SAL BETWEEN s.LOSAL AND s.HISAL
+    -> WHERE e.JOB <> 'CLERK'
+    -> ORDER BY e.SAL DESC;
++--------+----------+------+-------+-------+
+| ENAME  | JOB      | SAL  | GRADE | DNAME |
++--------+----------+------+-------+-------+
+| BLAKE  | MANAGER  | 3449 | E     | SALES |
+| TURNER | SALESMAN | 1815 | C     | SALES |
+| ALLEN  | SALESMAN | 1600 | C     | SALES |
+| MARTIN | SALESMAN | 1250 | B     | SALES |
+| WARD   | SALESMAN | 1250 | B     | SALES |
++--------+----------+------+-------+-------+
+5 rows in set (0.004 sec)
+
+
+MariaDB [prerna1]> SELECT e.ENAME, e.JOB, m.ENAME AS MANAGER
+    -> FROM EMPLOYEE e
+    -> LEFT JOIN EMPLOYEE m ON e.MGR = m.EMPNO;
++--------+----------+---------+
+| ENAME  | JOB      | MANAGER |
++--------+----------+---------+
+| ALLEN  | SALESMAN | BLAKE   |
+| WARD   | SALESMAN | BLAKE   |
+| MARTIN | SALESMAN | BLAKE   |
+| TURNER | SALESMAN | BLAKE   |
+| ADAMS  | CLERK    | NULL    |
+| JAMES  | CLERK    | BLAKE   |
+| MILLER | CLERK    | NULL    |
+| BLAKE  | MANAGER  | NULL    |
++--------+----------+---------+
+8 rows in set (0.001 sec)
+
+
+MariaDB [prerna1]> SELECT e.ENAME, e.JOB, (e.SAL * 12) AS ANNUAL_SAL,
+    ->        e.DEPTNO, d.DNAME, s.GRADE
+    -> FROM EMPLOYEE e
+    -> JOIN DEPARTMENT d ON e.DEPTNO = d.DEPTNO
+    -> JOIN SALGRADE s ON e.SAL BETWEEN s.LOSAL AND s.HISAL
+    -> WHERE (e.SAL * 12) >= 36000
+    ->    OR e.JOB <> 'CLERK';
++--------+----------+------------+--------+-------+-------+
+| ENAME  | JOB      | ANNUAL_SAL | DEPTNO | DNAME | GRADE |
++--------+----------+------------+--------+-------+-------+
+| WARD   | SALESMAN |      15000 |     30 | SALES | B     |
+| MARTIN | SALESMAN |      15000 |     30 | SALES | B     |
+| ALLEN  | SALESMAN |      19200 |     30 | SALES | C     |
+| TURNER | SALESMAN |      21780 |     30 | SALES | C     |
+| BLAKE  | MANAGER  |      41388 |     30 | SALES | E     |
++--------+----------+------------+--------+-------+-------+
+5 rows in set (0.001 sec)
+
+
+MariaDB [prerna1]> SELECT e.ENAME, e.JOB, (e.SAL * 12) AS ANNUAL_SAL,
+    ->        e.DEPTNO, d.DNAME, s.GRADE
+    -> FROM EMPLOYEE e
+    -> JOIN DEPARTMENT d ON e.DEPTNO = d.DEPTNO
+    -> JOIN SALGRADE s ON e.SAL BETWEEN s.LOSAL AND s.HISAL
+    -> WHERE (e.SAL * 12) = 30000
+    ->   AND e.JOB <> 'CLERK';
+Empty set (0.001 sec)
+
+
+MariaDB [prerna1]> SELECT
+    ->     e.EMPNO,
+    ->     e.ENAME,
+    ->     IFNULL(CAST(m.EMPNO AS CHAR), 'No Manager') AS MGR_NO,
+    ->     IFNULL(m.ENAME, 'No Manager') AS MGR_NAME
+    -> FROM EMPLOYEE e
+    -> LEFT JOIN EMPLOYEE m
+    -> ON e.MGR = m.EMPNO;
++-------+--------+------------+------------+
+| EMPNO | ENAME  | MGR_NO     | MGR_NAME   |
++-------+--------+------------+------------+
+|  7499 | ALLEN  | 7968       | BLAKE      |
+|  7521 | WARD   | 7968       | BLAKE      |
+|  7654 | MARTIN | 7968       | BLAKE      |
+|  7844 | TURNER | 7968       | BLAKE      |
+|  7876 | ADAMS  | No Manager | No Manager |
+|  7900 | JAMES  | 7968       | BLAKE      |
+|  7934 | MILLER | No Manager | No Manager |
+|  7968 | BLAKE  | No Manager | No Manager |
++-------+--------+------------+------------+
+8 rows in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT d.DEPTNO, d.DNAME, SUM(e.SAL) AS TOTAL_SAL
+    -> FROM EMPLOYEE e
+    -> JOIN DEPARTMENT d ON e.DEPTNO = d.DEPTNO
+    -> GROUP BY d.DEPTNO, d.DNAME;
++--------+------------+-----------+
+| DEPTNO | DNAME      | TOTAL_SAL |
++--------+------------+-----------+
+|     10 | RESEARCH   |      1573 |
+|     20 | ACCOUNTING |      1331 |
+|     30 | SALES      |     10514 |
++--------+------------+-----------+
+3 rows in set (0.001 sec)
+MariaDB [prerna1]> SELECT e.EMPNO, e.ENAME, d.LOCATION
+    -> FROM EMPLOYEE e
+    -> JOIN DEPARTMENT d ON e.DEPTNO = d.DEPTNO;
++-------+--------+-----------+
+| EMPNO | ENAME  | LOCATION  |
++-------+--------+-----------+
+|  7934 | MILLER | MUMBAI    |
+|  7876 | ADAMS  | CHENNAI   |
+|  7499 | ALLEN  | HYDERABAD |
+|  7521 | WARD   | HYDERABAD |
+|  7654 | MARTIN | HYDERABAD |
+|  7844 | TURNER | HYDERABAD |
+|  7900 | JAMES  | HYDERABAD |
+|  7968 | BLAKE  | HYDERABAD |
++-------+--------+-----------+
+8 rows in set (0.001 sec)
+
+MariaDB [prerna1]> SELECT e.ENAME, d.DNAME
+    -> FROM EMPLOYEE e
+    -> JOIN DEPARTMENT d ON e.DEPTNO = d.DEPTNO;
++--------+------------+
+| ENAME  | DNAME      |
++--------+------------+
+| MILLER | RESEARCH   |
+| ADAMS  | ACCOUNTING |
+| ALLEN  | SALES      |
+| WARD   | SALES      |
+| MARTIN | SALES      |
+| TURNER | SALES      |
+| JAMES  | SALES      |
+| BLAKE  | SALES      |
++--------+------------+
+8 rows in set (0.001 sec)
